@@ -1,0 +1,5 @@
+# git ignore for erlang
+*~
+*.beam
+*.dump
+
