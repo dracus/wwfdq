@@ -76,40 +76,4 @@ perms3(L) ->
 %	_ -> remove_empty_list(T, [H|Res])
 %    end.
 
-%perms:start([a,b,c,d,e,f,g,h,i,j]). with the following program:
-%-module(perms).
-%-export([perms/2,addAll/2,start/1,printAll/0,f/2]).
-%
-%
-%start(L) -> 
-%Pid1=spawn(perms,printAll,[]),
-%perms(L,Pid1).
-%
-%perms([],Pid) -> Pid![];
-%perms([H|T],Pid) -> 
-%Pid1 = spawn(perms,f,[H,Pid]),
-%perms(T,Pid1).
-%
-%f(H,Pid) -> receive
-%L -> g(H,L,Pid),
-%f(H,Pid)
-%end. 
-%
-%g(H,[],Pid) -> Pid![H];
-%
-%g(X,[H|T],Pid) ->
-%Pid![X|[H|T]], 
-%Pid1=spawn(perms,addAll,[H,Pid]),
-%g(X,T,Pid1).
-%
-%addAll(H,Pid) ->
-%receive
-%L ->Pid![H|L],
-%addAll(H,Pid) 
-%end.
-%
-%printAll()->
-%receive
-%L -> io:format("~w.~n",[L]),
-%printAll() 
-%end.
+
