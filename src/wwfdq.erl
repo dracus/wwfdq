@@ -34,12 +34,13 @@ is_word(Word) ->
     Words = read_word_list(),
     [X || X <- Words, X =:= Word].
 
--spec valid_words(Chars::list()) -> list().
+-spec valid_words(Chars::string()) -> list(string()).
 valid_words(Chars) ->
     Words = read_word_list(),
     Perms = all_perms(Chars),
     [Y || X <- Words, Y <- Perms, Y =:= X].
 
+-spec words_score(Chars::string()) -> list({string(), integer()}).
 words_score(Chars) ->    
     ValidWords = valid_words(Chars),
     [{X, word_score(X)} || X <- ValidWords].
