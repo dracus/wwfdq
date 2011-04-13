@@ -25,9 +25,9 @@
 %% THE SOFTWARE.
 
 -module(wwfdq).
--export([is_word/1, valid_words/1, 
-	 perms/1, perms2/1, perms3/1]).
+-export([is_word/1, valid_words/1]).
 
+-compile(export_all). %used for tests.. todo use eunit
 
 -spec is_word(Word::string()) -> list().
 is_word(Word) ->
@@ -37,7 +37,7 @@ is_word(Word) ->
 -spec valid_words(Chars::list()) -> list().
 valid_words(Chars) ->
     Words = read_word_list(),
-    Perms = perms3(Chars),
+    Perms = all_perms(Chars),
     [Y || X <- Words, Y <- Perms, Y =:= X].
     
 
@@ -52,28 +52,13 @@ read_word_list() ->
 
 perms([]) -> [[]];
 perms(L)  -> 
-     %io:format("L1: ~p~n", [L]),
     [[H|T] || H <- L, T <- perms(L--[H])].
 
-perms2([]) -> [[]];
+perms2([]) -> [];
 perms2(L) ->
-    %io:format("L2: ~p~n", [L]),
-    [[H|T] || H <- L, T <- perms2(L--[H])] ++ 
-	[lists:concat(perms2(L--[X])) 
-	 || X <- L, L--[X] =/= [], length(L--[X]) =:= 1].% ++
-	%[perms2(L--[X]) || X <- L, L--[X] =/= [], length(L--[X]) =/= 1].
+    perms(L) ++ lists:concat([perms2(L--[X]) || X <- L]).
 
-perms3(L) -> 
-    lists:usort([lists:concat(X) || X <- perms2(L)]).
-
-%remove_empty_list(List) ->
-%    remove_empty_list(List, []).
-%remove_empty_list([], Res) ->
-%    lists:reverse(Res);
-%remove_empty_list([H|T], Res) ->
-%    case H =:= [] of
-%	true -> remove_empty_list(T, Res);
-%	_ -> remove_empty_list(T, [H|Res])
-%    end.
+all_perms(L) -> 
+    lists:usort(perms2(L)).
 
 
