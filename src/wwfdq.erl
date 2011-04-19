@@ -25,9 +25,14 @@
 %% THE SOFTWARE.
 
 -module(wwfdq).
--export([is_word/1, valid_words/1]).
+-export([is_word/1,
+	 valid_words/1,
+	 valid_words_prefix/2,
+	 valid_words_suffix/2,
+	 words_score/1,
+	 words_score_prefix/2,
+	 words_score_suffix/2]).
 
--compile(export_all). %used for tests.. todo use eunit
 
 -spec is_word(Word::string()) -> list().
 is_word(Word) ->
@@ -38,14 +43,44 @@ is_word(Word) ->
 valid_words(Chars) ->
     Words = read_word_list(),
     Perms = all_perms(Chars),
-    [Y || X <- Words, Y <- Perms, Y =:= X].
+    [Y || X <- Words,
+	  Y <- Perms,
+	  Y =:= X].
+
+-spec valid_words_prefix(Prefix::string(), Chars::string()) ->
+				list(string()).
+valid_words_prefix(Prefix, Chars) ->
+    Words = read_word_list(),
+    Perms = all_perms(Chars),
+    [X || X <- Words,
+	  Y <- Perms,
+	  Prefix ++ Y =:= X].
+
+-spec valid_words_suffix(Suffix::string(), Chars::string()) ->
+				list(string()).
+valid_words_suffix(Suffix, Chars) ->
+    Words = read_word_list(),
+    Perms = all_perms(Chars),
+    [X || X <- Words,
+	  Y <- Perms,
+	  Y ++ Suffix =:= X].
 
 -spec words_score(Chars::string()) -> list({string(), integer()}).
 words_score(Chars) ->    
     ValidWords = valid_words(Chars),
-    lists:sort(fun({_, A}, {_, B}) -> A >= B end,
-	       [{X, word_score(X)} || X <- ValidWords]).
-    
+    sort_words_score(ValidWords).
+
+-spec words_score_prefix(Prefix::string(), Chars::string()) ->
+				list({string(), integer()}).
+words_score_prefix(Prefix, Chars) ->
+    ValidWords = valid_words_prefix(Prefix, Chars),
+    sort_words_score(ValidWords).
+
+-spec words_score_suffix(Suffix::string(), Chars::string()) ->
+				list({string(), integer()}).
+words_score_suffix(Suffix, Chars) ->
+    ValidWords = valid_words_suffix(Suffix, Chars),
+    sort_words_score(ValidWords).
 
 %%
 %% Internal functions
@@ -70,6 +105,10 @@ all_perms(L) ->
 
 word_score(Word) ->
     lists:sum([value(X) || X <- Word]).
+
+sort_words_score(Words) ->
+    lists:sort(fun({_, A}, {_, B}) -> A >= B end,
+	       [{X, word_score(X)} || X <- Words]).
 
 value(97) -> 1; %a
 value(98) -> 4; %b
