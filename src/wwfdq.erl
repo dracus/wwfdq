@@ -43,7 +43,8 @@ valid_words(Chars) ->
 -spec words_score(Chars::string()) -> list({string(), integer()}).
 words_score(Chars) ->    
     ValidWords = valid_words(Chars),
-    [{X, word_score(X)} || X <- ValidWords].
+    lists:sort(fun({_, A}, {_, B}) -> A >= B end,
+	       [{X, word_score(X)} || X <- ValidWords]).
     
 
 %%
@@ -71,7 +72,7 @@ word_score(Word) ->
     lists:sum([value(X) || X <- Word]).
 
 value(97) -> 1; %a
-value(98) -> 3; %b
+value(98) -> 4; %b
 value(99) -> 3; %c
 value(100) -> 2; %d
 value(101) -> 1; %e
@@ -82,16 +83,16 @@ value(105) -> 1; %i
 value(106) -> 8; %j
 value(107) -> 5; %k
 value(108) -> 1; %l
-value(109) -> 3; %m
+value(109) -> 4; %m
 value(110) -> 1; %n
 value(111) -> 1; %o
-value(112) -> 3; %p
+value(112) -> 4; %p
 value(113) -> 10; %q
 value(114) -> 1; %r
 value(115) -> 1; %s
 value(116) -> 1; %t
 value(117) -> 1; %u
-value(118) -> 4; %v
+value(118) -> 5; %v
 value(119) -> 4; %w
 value(120) -> 8; %x
 value(121) -> 4; %y
