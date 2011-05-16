@@ -9,7 +9,8 @@ is_word - Returns if a word is valid.
 valid_words - Returns a list of all valid words for a set of characters.
 valid_words_prefix - Same as valid_words but uses a prefix that must be the first part of the word.
 valid_words_suffix - Same as valid_words but uses a suffix that must be the last part of the word.
+valid_words_prefix_and_suffix - Same as valid_words but uses both a prefix and a suffix that must be part of the word.
 words_score - Returns the same as valid_words but also with a scoring for each word. Sorted with highest score first.
 words_score_prefix - See valid_words_prefix and words_score.
 words_score_suffix - See valid_words_suffix and words_score.
- 
+words_score_prefix_and_suffix - See valid_words_prefix_and_suffix and words_score. 

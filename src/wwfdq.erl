@@ -29,9 +29,11 @@
 	 valid_words/1,
 	 valid_words_prefix/2,
 	 valid_words_suffix/2,
+	 valid_words_prefix_and_suffix/3,
 	 words_score/1,
 	 words_score_prefix/2,
-	 words_score_suffix/2]).
+	 words_score_suffix/2,
+	 words_score_prefix_and_suffix/3]).
 
 
 -spec is_word(Word::string()) -> list().
@@ -65,6 +67,16 @@ valid_words_suffix(Suffix, Chars) ->
 	  Y <- Perms,
 	  Y ++ Suffix =:= X].
 
+-spec valid_words_prefix_and_suffix(
+	Prefix::string(), Chars::string(), Suffix::string()) ->
+				 list(string()).
+valid_words_prefix_and_suffix(Prefix, Chars, Suffix) ->
+    Words = read_word_list(),
+    Perms = all_perms(Chars),
+    [X || X <- Words,
+	  Y <- Perms,
+	  Prefix ++ Y ++ Suffix =:= X].
+
 -spec words_score(Chars::string()) -> list({string(), integer()}).
 words_score(Chars) ->    
     ValidWords = valid_words(Chars),
@@ -80,6 +92,13 @@ words_score_prefix(Prefix, Chars) ->
 				list({string(), integer()}).
 words_score_suffix(Suffix, Chars) ->
     ValidWords = valid_words_suffix(Suffix, Chars),
+    sort_words_score(ValidWords).
+
+-spec words_score_prefix_and_suffix(
+	Prefix::string(), Chars::string(), Suffix::string()) ->
+					   list({string(), integer()}).
+words_score_prefix_and_suffix(Prefix, Chars, Suffix) ->
+    ValidWords = valid_words_prefix_and_suffix(Prefix, Chars, Suffix),
     sort_words_score(ValidWords).
 
 %%
@@ -116,7 +135,7 @@ value(99) -> 3; %c
 value(100) -> 2; %d
 value(101) -> 1; %e
 value(102) -> 4; %f
-value(103) -> 2; %g
+value(103) -> 3; %g
 value(104) -> 4; %h
 value(105) -> 1; %i
 value(106) -> 8; %j
@@ -130,7 +149,7 @@ value(113) -> 10; %q
 value(114) -> 1; %r
 value(115) -> 1; %s
 value(116) -> 1; %t
-value(117) -> 1; %u
+value(117) -> 2; %u
 value(118) -> 5; %v
 value(119) -> 4; %w
 value(120) -> 8; %x
